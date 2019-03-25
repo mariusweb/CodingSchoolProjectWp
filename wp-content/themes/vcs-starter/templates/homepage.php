@@ -7,7 +7,8 @@ get_header();
 ?>
 <?php get_template_part('partials/profilepage'); ?>
 <?php get_template_part('partials/servicespage'); ?>
-<h1>Esame homepage.php</h1>
+<?php get_template_part('partials/gallerypage'); ?>
+<?php get_template_part('partials/contactpage'); ?>
 <!-- Start Point -->
 
 <?php get_footer(); ?>

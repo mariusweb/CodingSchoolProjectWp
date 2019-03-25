@@ -8,7 +8,7 @@
 				<div class="service">
 					<div class="service-width">
 						<div class="icon-service">
-							<?php the_sub_field('icon'); ?>
+							<?php the_sub_field('service_icon'); ?>
 						</div>
 						<h3><?php the_sub_field('title'); ?></h3>
 						<?php the_sub_field('description'); ?>

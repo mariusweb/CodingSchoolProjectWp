@@ -20,7 +20,7 @@
 						</div>
 					</div>
 					<div class="profile-img">
-						<img alt="Profile photo" src="<?php echo $image['url']; ?>">
+						<img alt="Profile photo" src="<?php echo $image['sizes']['profile'] ?>">
 					</div>
 				</div>
 				<?php
@@ -28,4 +28,12 @@
 		endif;
 		?>
 	</div>
+	<script type="application/ld+json">
+		{
+		  "@context": "http://schema.org",
+		  "@type": "ImageObject",
+		  "contentUrl": "assets/photos/profile-photo.jpg",
+		  "name": "Man"
+		}
+	</script>
 </section>

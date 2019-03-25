@@ -30,12 +30,14 @@ function theme_scripts(){
         wp_register_script('custom', ASSETS_URL . '/assets/scripts/custom.js', array('jquery'), false, true);
         wp_register_script('carousel', ASSETS_URL . '/assets/scripts/owl.carousel.min.js', array('custom'), false, true);
         wp_register_script('fancybox', ASSETS_URL . '/assets/scripts/jquery.fancybox.min.js', array('carousel'), false, true);
+         wp_register_script('font-awesome', ASSETS_URL . '/assets/fontawesome/js/all.js', array('fancybox'), false, true);
 
         //Loading
         wp_enqueue_script('jquery');
         wp_enqueue_script('custom');
         wp_enqueue_script('carousel');
         wp_enqueue_script('fancybox');
+        wp_enqueue_script('font-awesome');
     }
 }
 add_action('wp_enqueue_scripts', 'theme_scripts');
@@ -56,7 +58,7 @@ function theme_stylesheets(){
 		wp_register_style('carousel-min', ASSETS_URL . '/assets/css/owl.carousel.min.css', array('owl-carousel'), false, 'all');
 		wp_register_style('owl-theme', ASSETS_URL . '/assets/css/owl.theme.default.min.css', array('carousel-min'), false, 'all');
 		wp_register_style('fancybox', ASSETS_URL . '/assets/css/jquery.fancybox.min.css', array('owl-theme'), false, 'all');
-		wp_register_style('font-awesom', ASSETS_URL . '/assets/css/fontawesom.css', array('fancybox'), false, 'all');
+		wp_register_style('font-awesom', ASSETS_URL . '/assets/fontawesome/css/all.css', array('fancybox'), false, 'all');
 
 
 		//Loading
@@ -87,7 +89,7 @@ function custom_load_font_awesome() {
 function register_theme_menus() {
    
 	register_nav_menus(array( 
-        'primary-navigation' => __( 'Primary Navigation' ) 
+        'primary-navigation' => __( 'Primary Navigation' )
     ));
 }
 
@@ -129,6 +131,7 @@ function dump($data){
 add_image_size("logo", 50, 100, false);
 add_image_size("background", 3081, 4057, false);
 add_image_size("profile", 5000, 5000, false);
+add_image_size("latest-work", 4621, 3028, false);
 
 class custom_navwalker extends Walker_Nav_Menu {
 
@@ -259,4 +262,128 @@ class custom_navwalker extends Walker_Nav_Menu {
 		 */
 		$output .= apply_filters( 'walker_nav_menu_start_el', $item_output, $item, $depth, $args );
 	}
+}
+//CUSTOM IRASAS
+
+add_action( 'init', 'project_posts_init' );
+/**
+ * Register a project post type.
+ *
+ * @link http://codex.wordpress.org/Function_Reference/register_post_type
+ */
+function project_posts_init() {
+	$labels = array(
+		'name'               => _x( 'Projects', 'post type general name', 'vcs-starter' ),
+		'singular_name'      => _x( 'Project', 'post type singular name', 'vcs-starter' ),
+		'menu_name'          => _x( 'Projects', 'admin menu', 'vcs-starter' ),
+		'name_admin_bar'     => _x( 'Project', 'add new on admin bar', 'vcs-starter' ),
+		'add_new'            => _x( 'Add New', 'project', 'vcs-starter' ),
+		'add_new_item'       => __( 'Add New Project', 'vcs-starter' ),
+		'new_item'           => __( 'New Project', 'vcs-starter' ),
+		'edit_item'          => __( 'Edit Project', 'vcs-starter' ),
+		'view_item'          => __( 'View Project', 'vcs-starter' ),
+		'all_items'          => __( 'All Projects', 'vcs-starter' ),
+		'search_items'       => __( 'Search Projects', 'vcs-starter' ),
+		'parent_item_colon'  => __( 'Parent Projects:', 'vcs-starter' ),
+		'not_found'          => __( 'No projects found.', 'vcs-starter' ),
+		'not_found_in_trash' => __( 'No projects found in Trash.', 'vcs-starter' )
+	);
+
+	$args = array(
+		'labels'             => $labels,
+        'description'        => __( 'Description.', 'vcs-starter' ),
+		'public'             => true,
+		'publicly_queryable' => true,
+		'show_ui'            => true,
+		'show_in_menu'       => true,
+		'query_var'          => true,
+		'rewrite'            => array( 'slug' => __('project') ),
+		'capability_type'    => 'post',
+		'has_archive'        => true,
+		'hierarchical'       => false,
+		'menu_position'      => null,
+		'supports'           => array( 'title', 'editor', 'author', 'thumbnail', 'excerpt', 'comments' )
+	);
+
+	register_post_type( 'project', $args );
+}
+
+
+//CUSTOM KATEGORIJA
+
+// hook into the init action and call create_book_taxonomies when it fires
+add_action( 'init', 'create_project_taxonomies', 0 );
+
+// create two taxonomies, genres and writers for the post type "book"
+function create_project_taxonomies() {
+	// Add new taxonomy, make it hierarchical (like categories)
+	$labels = array(
+		'name'              => _x( 'Project categories', 'taxonomy general name', 'vcs-starter' ),
+		'singular_name'     => _x( 'Project category', 'taxonomy singular name', 'vcs-starter' ),
+		'search_items'      => __( 'Search Project categories', 'vcs-starter' ),
+		'all_items'         => __( 'All Project categories', 'vcs-starter' ),
+		'parent_item'       => __( 'Parent Project category', 'vcs-starter' ),
+		'parent_item_colon' => __( 'Parent Project category:', 'vcs-starter' ),
+		'edit_item'         => __( 'Edit Project category', 'vcs-starter' ),
+		'update_item'       => __( 'Update Project category', 'vcs-starter' ),
+		'add_new_item'      => __( 'Add New Project category', 'vcs-starter' ),
+		'new_item_name'     => __( 'New Project category Name', 'vcs-starter' ),
+		'menu_name'         => __( 'Project category', 'vcs-starter' ),
+	);
+
+	$args = array(
+		'hierarchical'      => true,
+		'labels'            => $labels,
+		'show_ui'           => true,
+		'show_admin_column' => true,
+		'query_var'         => true,
+		'rewrite'           => array( 'slug' => __('project-category') ),
+	);
+
+	register_taxonomy( 'project-category', array( 'project' ), $args );
+}
+
+//CUSTOM IRASAS
+
+add_action( 'init', 'testimonial_posts_init' );
+/**
+ * Register a project post type.
+ *
+ * @link http://codex.wordpress.org/Function_Reference/register_post_type
+ */
+function testimonial_posts_init() {
+	$labels = array(
+		'name'               => _x( 'Testimonial', 'post type general name', 'vcs-starter' ),
+		'singular_name'      => _x( 'Testimonials', 'post type singular name', 'vcs-starter' ),
+		'menu_name'          => _x( 'Testimonial', 'admin menu', 'vcs-starter' ),
+		'name_admin_bar'     => _x( 'Testimonials', 'add new on admin bar', 'vcs-starter' ),
+		'add_new'            => _x( 'Add New', 'testimonial', 'vcs-starter' ),
+		'add_new_item'       => __( 'Add New Testimonials', 'vcs-starter' ),
+		'new_item'           => __( 'New Testimonials', 'vcs-starter' ),
+		'edit_item'          => __( 'Edit Testimonials', 'vcs-starter' ),
+		'view_item'          => __( 'View Testimonials', 'vcs-starter' ),
+		'all_items'          => __( 'All Testimonial', 'vcs-starter' ),
+		'search_items'       => __( 'Search Testimonial', 'vcs-starter' ),
+		'parent_item_colon'  => __( 'Parent Testimonial:', 'vcs-starter' ),
+		'not_found'          => __( 'No testimonial found.', 'vcs-starter' ),
+		'not_found_in_trash' => __( 'No testimonial found in Trash.', 'vcs-starter' )
+	);
+
+	$args = array(
+		'labels'             => $labels,
+        'description'        => __( 'Description.', 'vcs-starter' ),
+		'public'             => true,
+		'publicly_queryable' => true,
+		'show_ui'            => true,
+		'show_in_menu'       => true,
+		'query_var'          => true,
+		'rewrite'            => array( 'slug' => __('testimonial') ),
+		'capability_type'    => 'post',
+		'has_archive'        => true,
+		'hierarchical'       => false,
+		'menu_position'      => null,
+		'supports'           => array( 'title', 'editor', 'author', 'thumbnail', 'excerpt', 'comments' )
+	);
+
+	register_post_type( 'testimonial', $args );
 }

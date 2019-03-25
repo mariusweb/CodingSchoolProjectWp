@@ -12,7 +12,17 @@
 	$image = get_field('background_image', 'option')
 	 ?>
 	<div class="background-img" style="background-image: url(<?php echo $image['sizes']['background'] ?>);">
-		<!-- <img class="background-paintig" alt="Backgraund image" src="assets/photos/mountain.jpg"> -->
+		<script type="application/ld+json">
+			{
+			  "@context": "http://schema.org",
+			  "@type": "ImageObject",
+			  "author": "Mat Reding",
+			  "contentUrl": "https://unsplash.com/photos/JuM2f-6P6IM",
+			  "datePublished": "2019-03-03",
+			  "description": "Picture was was taken by Mat Reding.",
+			  "name": "Mountain"
+			}
+		</script>
 		<header class="transparent">
 			<div class="container header-container">
 				<div class="header-margin">
@@ -38,7 +48,16 @@
 						<a href="<?php echo $link['url']; ?>" <?php echo $target; ?>>
 							<?php echo $link['title']; ?>
 						</a>
-						<!-- the_field('psd_templates', 'option'); -->
+						<script type="application/ld+json">
+						{ 
+						  "@context": "http://schema.org", 
+						  "@type": "WebSite", 
+						  "url": "https://www.os-templates.com/", 
+						  "name": "OS Templates",
+						  "description": "Free PSD Website Template",
+						  "publisher": "OS Templates",
+						    }
+						</script>
 					</div>
 					<div class="burger-column">
 						<a class="burger-menu">
