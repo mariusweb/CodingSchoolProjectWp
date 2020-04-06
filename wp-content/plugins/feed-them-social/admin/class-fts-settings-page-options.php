@@ -57,10 +57,12 @@ class FTS_Settings_Page_Options {
 					),
 
 					// All Feeds (1 of each for now)
-					2 => array(
-						'value' => 'multiple_facebook',
-						'title' => __( 'Multiple Facebook Feeds', 'feed-them-social' ),
-					),
+                    // removing for now since fb remove the Page Public Content Permission on October 23rd, 1999
+				//	2 => array(
+				//		'value' => 'multiple_facebook',
+				//		'title' => __( 'Multiple Facebook Feeds', 'feed-them-social' ),
+				//	),
+
 				),
 				'premium_msg_boxes'  => array(
 					'main_select' => array(
@@ -437,6 +439,10 @@ class FTS_Settings_Page_Options {
 					// 'short_attr_final' => 'yes',
 					// Inputs relative to all Feed_types of this feed. (Eliminates Duplication)[Excluded from loop when creating select]
 					// Twitter Search Name
+
+                    // MUST ADD TWITTER DIRECTIONS FOR SEARCH
+
+                    // If you want to filter a specific users hashtag copy this example into the first input below and replace the user_name and YourHashtag name. DO NOT remove the from: or %# characters. NOTE: Only displays last 7 days worth of Tweets. from:user_name%#YourHashtag
 					array(
 						'option_type' => 'input',
 						'input_wrap_class' => 'combine_twitter_hashtag_etc_name',
@@ -535,23 +541,27 @@ class FTS_Settings_Page_Options {
 						'name'        => 'combine_instagram_type',
 						'options'     => array(
 
-							// User Feed
+							// Basic Feed
 							array(
-								'value' => 'user',
-								'label' => __( 'User Feed', 'feed-them-social' ),
+								'value' => 'basic',
+								'label' => __( 'Basic Feed', 'feed-them-social' ),
 							),
-
-							// hastag Feed
+                            // Business Feed
+                            array(
+                                'value' => 'business',
+                                'label' => __( 'Business Feed', 'feed-them-social' ),
+                            ),
+							// Hastag Feed
 							array(
 								'value' => 'hashtag',
 								'label' => __( 'Hashtag Feed', 'feed-them-social' ),
 							),
 
 							// location Feed
-							array(
-								'value' => 'location',
-								'label' => __( 'Location Feed', 'feed-them-social' ),
-							),
+							//array(
+							//	'value' => 'location',
+							//	'label' => __( 'Location Feed', 'feed-them-social' ),
+							// ),
 						),
 						'req_plugin'  => 'combine_streams',
 						'short_attr'  => array(
@@ -591,13 +601,9 @@ class FTS_Settings_Page_Options {
 								'class' => 'combine-instagram-user-option-text',
 							),
 							2 => array(
-								'text' => __( 'Hashtag (required)', 'feed-them-social' ),
+								'text' => __( 'Instagram ID # (required)', 'feed-them-social' ),
 								'class' => 'combine-instagram-hashtag-option-text',
-							),
-							3 => array(
-								'text' => __( 'Location ID (required)', 'feed-them-social' ),
-								'class' => 'combine-instagram-location-option-text',
-							),
+							)
 						),
 						'type'        => 'text',
 						'id'          => 'combine_instagram_name',
@@ -609,13 +615,9 @@ class FTS_Settings_Page_Options {
 								'class' => 'combine-instagram-user-option-text',
 							),
 							2 => array(
-								'text' => __( 'Add your Hashtag below. Do not add the #, just the name.', 'feed-them-social' ),
-								'class' => 'combine-instagram-hashtag-option-text',
-							),
-							3 => array(
-								'text' => __( '<strong>NOTE:</strong> The post count may not count proper in some location instances because private instagram photos are in the mix. We cannot pull private accounts photos in any location feed. Add your Location ID below.', 'feed-them-social' ),
-								'class' => 'combine-instagram-location-option-text',
-							),
+                                'text' => __( '<div class="fts-insta-info-plus-wrapper">If your Hashtag Access Token is set on the Instagram Options page of our plugin your ID should appear below.</div>', 'feed-them-social' ),
+                                'class' => 'combine-instagram-hashtag-option-text',
+							)
 						),
 
 						// Relative to JS.
@@ -625,9 +627,65 @@ class FTS_Settings_Page_Options {
 							'var_final_if' => 'no',
 							'empty_error' => 'set',
 							'empty_error_value' => '',
-						),
-						'sub_options_end' => 2,
+						)
 					),
+
+
+                    // Instagram Hashtag
+                    array(
+                        'option_type' => 'input',
+                        'input_wrap_class' => 'combine_instagram_hashtag',
+                        'label'       => array(
+                            1 => array(
+                                'text' => __( 'Hashtag (required)', 'feed-them-social' ),
+                                'class' => 'combine-instagram-hashtag-option-text',
+                            ),
+                        ),
+                        'type'        => 'text',
+                        'id'          => 'combine_instagram_hashtag',
+                        'name'        => 'combine_instagram_hashtag',
+                        'required'    => 'yes',
+                        'instructional-text' => array(
+                            1 => array(
+                                'text' => __( 'Add your hashtag below. <strong>DO NOT</strong> add the #, just the name. Only one hashtag allowed at this time. Hashtag media only stays on Instagram for 24 hours and the API does not give us a date/time. That also means if you decide to combine this feed these media posts will appear before any other posts because we cannot sort them by date. In order to use the Instagram hashtag feed you must have your Instagram account linked to a Facebook Business Page. <a target="_blank" href="https://www.slickremix.com/docs/link-instagram-account-to-facebook/">Read Instructions.</a>', 'feed-them-social' ),
+                                'class' => 'combine-instagram-hashtag-option-text',
+                            ),
+                        ),
+
+                        // Relative to JS.
+                        'short_attr'  => array(
+                            'attr_name'    => 'hashtag',
+                            'var_final_if' => 'no',
+                            'empty_error'  => 'yes',
+                        ),
+                    ),
+
+
+                    // Hashtag Type
+                    array(
+                        'option_type' => 'select',
+                        'input_wrap_class' => 'combine_instagram_hashtag_type',
+                        'label'       => __( 'Hashtag Search Type', 'feed-them-social' ),
+
+                        'type'        => 'text',
+                        'id'          => 'combine_instagram_hashtag_type',
+                        'name'        => 'combine_instagram_hashtag_type',
+                        'class'       => 'combine_instagram-hashtag-type',
+                        'options'     => array(
+                            1 => array(
+                                'label' => __( 'Recent Media', 'feed-them-social' ),
+                                'value' => 'recent-media',
+                            ),
+                            2 => array(
+                                'label' => __( 'Top Media (Most Interactions)', 'feed-them-social' ),
+                                'value' => 'top-media',
+                            ),
+                        ),
+                        'short_attr'  => array(
+                            'attr_name' => 'instagram_search',
+                        ),
+                        'sub_options_end' => 2,
+                    ),
 
 					// Combine Pinterest
 					array(
@@ -1123,7 +1181,7 @@ class FTS_Settings_Page_Options {
 				'premium_msg_boxes'  => array(
 					'album_videos' => array(
 						'req_plugin' => 'fts_premium',
-						'msg'        => 'The Facebook video feed allows you to view your uploaded videos from facebook. See these great examples and options of all the different ways you can bring new life to your wordpress site! <a href="https://feedthemsocial.com/facebook-videos-demo/" target="_blank">View Demo</a><br /><br />Additionally if you purchase the Carousel Plugin you can showcase your videos in a slideshow or carousel. Works with your Facebook Photos too! <a href="https://feedthemsocial.com/facebook-carousels/" target="_blank">View Carousel Demo</a>',
+						'msg'        => 'The Facebook video feed allows you to view your uploaded videos from facebook. See these great examples and options of all the different ways you can bring new life to your WordPress site! <a href="https://feedthemsocial.com/facebook-videos-demo/" target="_blank">View Demo</a><br /><br />Additionally if you purchase the Carousel Plugin you can showcase your videos in a slideshow or carousel. Works with your Facebook Photos too! <a href="https://feedthemsocial.com/facebook-carousels/" target="_blank">View Carousel Demo</a>',
 					),
 					'reviews'      => array(
 						'req_plugin' => 'facebook_reviews',
@@ -1201,25 +1259,25 @@ class FTS_Settings_Page_Options {
 					),
 
 					// Access Token
-			//		array(
-			//			'option_type' => 'input',
-			//			'label'       => __( 'Access Token (required) ', 'feed-them-social' ) . '<br/><small>' . __( '', 'feed-them-social' ) . '</small>',
-			//			'type'        => 'text',
-			//			'id'          => 'fb_access_token',
-			//			'name'        => 'fb_access_token',
+					array(
+						'option_type' => 'input',
+						'label'       => __( 'Access Token (required) ', 'feed-them-social' ) . '<br/><small>' . __( '', 'feed-them-social' ) . '</small>',
+						'type'        => 'text',
+						'id'          => 'fb_access_token',
+						'name'        => 'fb_access_token',
 
 						// Only needed if Prem_Req = More otherwise remove (must have array key req_plugin)
-						// 'prem_req_more_msg' => '<br/><small>' . __('More than 6 Requires <a target="_blank" href="https://www.slickremix.com/downloads/feed-them-social-premium-extension/">Premium version</a>', 'feed-them-social') . '</small>',
-			//			'placeholder' => __( '', 'feed-them-social' ),
+						 'prem_req_more_msg' => '<br/><small>' . __('More than 6 Requires <a target="_blank" href="https://www.slickremix.com/downloads/feed-them-social-premium-extension/">Premium version</a>', 'feed-them-social') . '</small>',
+						'placeholder' => __( '', 'feed-them-social' ),
 
 						// Relative to JS.
-			//			'short_attr'  => array(
-			//				'attr_name'    => 'access_token',
-			//				'var_final_if' => 'yes',
-			//				'empty_error'  => 'set',
-			//				'empty_error_value' => '',
-			//			),
-			//		),
+						'short_attr'  => array(
+							'attr_name'    => 'access_token',
+							'var_final_if' => 'yes',
+							'empty_error'  => 'set',
+							'empty_error_value' => '',
+						),
+					),
 
 					// Facebook Album ID
 					array(
@@ -4338,23 +4396,27 @@ class FTS_Settings_Page_Options {
 				// Feed Types and their options
 				'feeds_types'        => array(
 
-					// User Feed
+					// Basic Feed
 					array(
-						'value' => 'user',
-						'title' => __( 'User Feed', 'feed-them-social' ),
+						'value' => 'basic',
+						'title' => __( 'Basic Feed', 'feed-them-social' ),
 					),
-
-					// hastag Feed
+                    // Business Feed
+                    array(
+                        'value' => 'business',
+                        'title' => __( 'Business Feed', 'feed-them-social' ),
+                    ),
+					// Hastag Feed
 					array(
 						'value' => 'hashtag',
 						'title' => __( 'Hashtag Feed', 'feed-them-social' ),
 					),
 
 					// location Feed
-					array(
-						'value' => 'location',
-						'title' => __( 'Location Feed', 'feed-them-social' ),
-					),
+					// array(
+					//	'value' => 'location',
+					//	'title' => __( 'Location Feed', 'feed-them-social' ),
+					//),
 				),
 
 				// Feed Type Selection
@@ -4384,10 +4446,6 @@ class FTS_Settings_Page_Options {
 								'class' => 'instagram-user-option-text',
 							),
 							2 => array(
-								'text' => __( 'Hashtag (required)', 'feed-them-social' ),
-								'class' => 'instagram-hashtag-option-text',
-							),
-							3 => array(
 								'text' => __( 'Location ID (required)', 'feed-them-social' ),
 								'class' => 'instagram-location-option-text',
 							),
@@ -4402,10 +4460,6 @@ class FTS_Settings_Page_Options {
                                 'class' => 'instagram-user-option-text',
 							),
 							2 => array(
-								'text' => __( 'Add your Hashtag below. <strong>DO NOT</strong> add the #, just the name.', 'feed-them-social' ),
-								'class' => 'instagram-hashtag-option-text',
-							),
-							3 => array(
 								'text' => __( '<strong>NOTE:</strong> The post count may not count proper in some location instances because private instagram photos are in the mix. We cannot pull private accounts photos in any location feed. Add your Location ID below.', 'feed-them-social' ),
 								'class' => 'instagram-location-option-text',
 							),
@@ -4419,26 +4473,81 @@ class FTS_Settings_Page_Options {
 						),
 					),
 
+
+                    // Instagram Hashtag
+                    array(
+                        'option_type' => 'input',
+                        'input_wrap_class' => 'instagram_hashtag',
+                        'label'       => array(
+                            1 => array(
+                                'text' => __( 'Hashtag (required)', 'feed-them-social' ),
+                                'class' => 'instagram-hashtag-option-text',
+                            ),
+                        ),
+                        'type'        => 'text',
+                        'id'          => 'instagram_hashtag',
+                        'name'        => 'instagram_hashtag',
+                        'required'    => 'yes',
+                        'instructional-text' => array(
+                            1 => array(
+                                'text' => __( 'Add your hashtag below. <strong>DO NOT</strong> add the #, just the name. Only one hashtag allowed at this time. Hashtag media only stays on Instagram for 24 hours and the API does not give us a date/time. In order to use the Instagram hashtag feed you must have your Instagram account linked to a Facebook Business Page. <a target="_blank" href="https://www.slickremix.com/docs/link-instagram-account-to-facebook/">Read Instructions.</a>', 'feed-them-social' ),
+                                'class' => 'instagram-hashtag-option-text',
+                            ),
+                        ),
+
+                        // Relative to JS.
+                        'short_attr'  => array(
+                            'attr_name'    => 'hashtag',
+                            'var_final_if' => 'no',
+                            'empty_error'  => 'yes',
+                        ),
+                    ),
+
 					// Access Token
-			//		array(
-			//			'option_type' => 'input',
-			//			'label'       => __( 'Access Token (required) ', 'feed-them-social' ) . '<br/><small>' . __( '', 'feed-them-social' ) . '</small>',
-			//			'type'        => 'text',
-			//			'id'          => 'insta_access_token',
-			//			'name'        => 'insta_access_token',
+					array(
+						'option_type' => 'input',
+						'label'       => __( 'Access Token (required) ', 'feed-them-social' ) . '<br/><small>' . __( '', 'feed-them-social' ) . '</small>',
+						'type'        => 'text',
+						'id'          => 'insta_access_token',
+						'name'        => 'insta_access_token',
 
 						// Only needed if Prem_Req = More otherwise remove (must have array key req_plugin)
-						// 'prem_req_more_msg' => '<br/><small>' . __('More than 6 Requires <a target="_blank" href="https://www.slickremix.com/downloads/feed-them-social-premium-extension/">Premium version</a>', 'feed-them-social') . '</small>',
-			//			'placeholder' => __( '', 'feed-them-social' ),
+                        'prem_req_more_msg' => '<br/><small>' . __('More than 6 Requires <a target="_blank" href="https://www.slickremix.com/downloads/feed-them-social-premium-extension/">Premium version</a>', 'feed-them-social') . '</small>',
+						'placeholder' => __( '', 'feed-them-social' ),
 
 						// Relative to JS.
-			//			'short_attr'  => array(
-			//				'attr_name'    => 'access_token',
-			//				'var_final_if' => 'yes',
-			//				'empty_error'  => 'set',
-			//				'empty_error_value' => '',
-			//			),
-			//		),
+						'short_attr'  => array(
+							'attr_name'    => 'access_token',
+							'var_final_if' => 'yes',
+							'empty_error'  => 'set',
+							'empty_error_value' => '',
+						),
+					),
+
+                    // Hashtag Type
+                    array(
+                        'option_type' => 'select',
+                        'input_wrap_class' => 'instagram_hashtag_type',
+                        'label'       => __( 'Hashtag Search Type', 'feed-them-social' ),
+
+                        'type'        => 'text',
+                        'id'          => 'instagram_hashtag_type',
+                        'name'        => 'instagram_hashtag_type',
+                        'class'       => 'instagram-hashtag-type',
+                        'options'     => array(
+                            1 => array(
+                                'label' => __( 'Recent Media', 'feed-them-social' ),
+                                'value' => 'recent-media',
+                            ),
+                            2 => array(
+                                'label' => __( 'Top Media (Most Interactions)', 'feed-them-social' ),
+                                'value' => 'top-media',
+                            ),
+                        ),
+                        'short_attr'  => array(
+                            'attr_name' => 'search',
+                        ),
+                    ),
 
 					// Pic Count
 					array(
@@ -4645,13 +4754,13 @@ class FTS_Settings_Page_Options {
 						'name'        => 'instagram-custom-gallery',
 						'options'     => array(
 							1 => array(
-								'label' => __( 'New Gallery Style', 'feed-them-social' ),
+								'label' => __( 'Responsive Gallery', 'feed-them-social' ),
 								'value' => 'yes',
 							),
-							2 => array(
-								'label' => __( 'Classic Gallery Style', 'feed-them-social' ),
-								'value' => 'no',
-							),
+						//	2 => array(
+						//		'label' => __( 'Classic Gallery Style', 'feed-them-social' ),
+						//		'value' => 'no',
+						//	),
 						),
 						'short_attr'  => array(
 							'attr_name' => 'super_gallery',
@@ -4774,7 +4883,7 @@ class FTS_Settings_Page_Options {
 					// Hide Date, Likes and Comments
 					array(
 						'option_type' => 'select',
-						'label'       => __( 'Date, Heart & Comment icon', 'feed-them-social' ),
+						'label'       => __( 'Date, Heart & Comment icon', 'feed-them-social' ) . '<br/><small>' . __( 'Heart and Comment counts only work when using Feed Type: Business Feed.', 'feed-them-social' ) . '</small>',
 						'label_note'  => __( 'Good for image sizes under 120px', 'feed-them-social' ),
 						'type'        => 'text',
 						'id'          => 'fts-slicker-instagram-container-hide-date-likes-comments',
@@ -4977,7 +5086,21 @@ class FTS_Settings_Page_Options {
 							'value'    => 'yes',
 						),
 					),
+                        'hashtag'      => array(
+                            'if' => array(
+                                'class'    => 'select#instagram-messages-selector',
+                                'operator' => '==',
+                                'value'    => 'hashtag',
+                            ),
+                        ),
 				),
+
+                'premium_msg_boxes'  => array(
+                    'hashtag' => array(
+                        'req_plugin' => 'fts_premium',
+                        'msg'        => 'The Instagram hashtag feed allows you to view publicly visible images and videos that have been tagged with a specific hashtag. See this example and how you can bring new life to your WordPress site! <a href="https://feedthemsocial.com/instagram-hashtag-feed-demo/" target="_blank">View Demo</a>',
+                    ),
+                ),
 
 				// Generator Info
 				'generator_title'    => __( 'Instagram Feed Shortcode', 'feed-them-social' ),
