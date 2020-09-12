@@ -41,9 +41,9 @@ class FTS_Instagram_Feed extends feed_them_social_functions {
 	 */
 	public function convert_instagram_description_links( $bio ) {
 		// Create links from @mentions and regular links.
-		$bio = preg_replace( '~https?://[^<>\s]+~i', '<a href="$0" target="_blank">$0</a>', $bio );
-		$bio = preg_replace( '/#+(\w+)/u', '<a href="https://www.instagram.com/explore/tags/$1" target="_blank">$0</a>', $bio );
-		$bio = preg_replace( '/@+(\w+)/u', '<a href="https://www.instagram.com/$1" target="_blank">@$1</a>', $bio );
+		$bio = preg_replace( '~https?://[^<>\s]+~i', '<a href="$0" target="_blank" rel="noreferrer">$0</a>', $bio );
+		$bio = preg_replace( '/#+(\w+)/u', '<a href="https://www.instagram.com/explore/tags/$1" target="_blank" rel="noreferrer">$0</a>', $bio );
+		$bio = preg_replace( '/@+(\w+)/u', '<a href="https://www.instagram.com/$1" target="_blank" rel="noreferrer">@$1</a>', $bio );
 
 		return $bio;
 	}
@@ -59,9 +59,9 @@ class FTS_Instagram_Feed extends feed_them_social_functions {
 	 */
 	public function convert_instagram_links( $instagram_caption_a_title ) {
 		// Create links from @mentions, #hashtags and regular links.
-		$instagram_caption_a_title = preg_replace( '~https?://[^<>\s]+~i', '<a href="$0" target="_blank">$0</a>', $instagram_caption_a_title );
-		$instagram_caption         = preg_replace( '/#+(\w+)/u', '<a href="https://www.instagram.com/explore/tags/$1" target="_blank">$0</a>', $instagram_caption_a_title );
-		$instagram_caption         = preg_replace( '/@+(\w+)/u', '<a href="https://www.instagram.com/$1" target="_blank">@$1</a>', $instagram_caption );
+		$instagram_caption_a_title = preg_replace( '~https?://[^<>\s]+~i', '<a href="$0" target="_blank" rel="noreferrer">$0</a>', $instagram_caption_a_title );
+		$instagram_caption         = preg_replace( '/#+(\w+)/u', '<a href="https://www.instagram.com/explore/tags/$1" target="_blank" rel="noreferrer">$0</a>', $instagram_caption_a_title );
+		$instagram_caption         = preg_replace( '/@+(\w+)/u', '<a href="https://www.instagram.com/$1" target="_blank" rel="noreferrer">@$1</a>', $instagram_caption );
 
 		return $instagram_caption;
 	}
@@ -263,7 +263,7 @@ class FTS_Instagram_Feed extends feed_them_social_functions {
 	 * @since 1.9.6
 	 */
 	public function fts_view_on_instagram_link( $post_data ) {
-		return '<a href="' . esc_url( $this->fts_view_on_instagram_url( $post_data ) ) . '" class="fts-view-on-instagram-link" target="_blank">' . esc_html( 'View on Instagram', 'feed-them-social' ) . '</a>';
+		return '<a href="' . esc_url( $this->fts_view_on_instagram_url( $post_data ) ) . '" class="fts-view-on-instagram-link" target="_blank" rel="noreferrer">' . esc_html( 'View on Instagram', 'feed-them-social' ) . '</a>';
 	}
 
 	/**
@@ -485,9 +485,9 @@ class FTS_Instagram_Feed extends feed_them_social_functions {
                             $insta_data = (object) array_merge( (array) $instagram_business, (array) $instagram_business_output );
 
                        // echo 'rrrrrrrrrrrr';
-                        //	echo '<br/><pre>';
-                        //	    print_r( $insta_data );
-                        //	echo '</pre>';
+                      //  	echo '<br/><pre>';
+                      //  	    print_r( $insta_data );
+                      //  	echo '</pre>';
 
                             if ( ! isset( $_GET['load_more_ajaxing'] ) ) {
                                 $this->fts_create_feed_cache( $business_cache, $insta_data );
@@ -565,9 +565,9 @@ class FTS_Instagram_Feed extends feed_them_social_functions {
                         }
                     }
 
-					   // echo '<br/>asdfasdfasdf<pre>';
-					   // print_r( $insta_data );
-					   // echo '</pre>zzzz';
+					  //  echo '<br/>asdfasdfasdf<pre>';
+					  //  print_r( $insta_data );
+					  //  echo '</pre>zzzz';
 				// $instagram_data_array['user_info'] = 'https://graph.instagram.com/me?fields=id,username,media_count,account_type&access_token=' . $fts_instagram_access_token_final;
 			}
 
@@ -605,7 +605,7 @@ class FTS_Instagram_Feed extends feed_them_social_functions {
 					if ( current_user_can( 'administrator' ) ) {
 
 						if ( 'user' === $type || !isset( $type )  ) {
-                                $error = esc_html( 'The Legacy API is depreciated as of March 31st, 2020 in favor of the new Instagram Graph API and the Instagram Basic Display API. Please go to the Instgram Options page of our plugin and reconnect your account and generate a new shortcode and replace your existing one.', 'feed-them-social' );
+                                $error = esc_html( 'The Legacy API is depreciated as of March 31st, 2020 in favor of the new Instagram Graph API and the Instagram Basic Display API. Please go to the instagram Options page of our plugin and reconnect your account and generate a new shortcode and replace your existing one.', 'feed-them-social' );
 						} elseif ( isset( $error_check->error_message ) ) {
 							$error = $error_check->error_message;
 						} elseif ( isset( $error_check->meta->error_message ) ) {
@@ -644,6 +644,9 @@ class FTS_Instagram_Feed extends feed_them_social_functions {
 				$website         = $instagram_user_info->website;
 
 			}
+			elseif( 'basic' === $type ){
+                 $username = $insta_data->data[0]->username;
+			}
 
 			if ( current_user_can( 'administrator' ) && 'true' === $debug_userinfo ) {
 				echo 'aSDasdasDasdaSDa<pre>';
@@ -666,13 +669,13 @@ class FTS_Instagram_Feed extends feed_them_social_functions {
 	<div class="fts-profile-wrap">
 					<?php if ( isset( $profile_photo ) && 'yes' === $profile_photo ) { ?>
 			<div class="fts-profile-pic">
-				<a href="https://www.instagram.com/<?php echo esc_attr( $username ); ?>" target="_blank"><img
+				<a href="https://www.instagram.com/<?php echo esc_attr( $username ); ?>" target="_blank" rel="noreferrer"><img
 							src="<?php echo esc_url( $profile_picture ); ?>" title="<?php echo esc_attr( $username ); ?>"/></a>
 			</div>
 						<?php
 }
 
-if ( isset( $profile_name ) && 'yes' === $profile_name ) {
+if ( isset( $profile_name, $type ) && 'yes' === $profile_name  && 'business' === $type  ) {
 	?>
 			<div class="fts-profile-name-wrap">
 
@@ -688,7 +691,7 @@ if ( isset( $profile_name ) && 'yes' === $profile_name ) {
 	<?php
 }
 // $profile stats comes from the shortcode
-if ( 'yes' === $profile_stats ) {
+if ( isset( $profile_stats, $type ) && 'yes' === $profile_stats  && 'business' === $type ) {
 	// These need to be in this order to keep the different counts straight since I used either $instagram_likes or $instagram_comments throughout.
 	$number_posted_pics_fb_api = isset( $instagram_user_info->media_count ) ? $instagram_user_info->media_count : '';
 	$number_posted_pics        = isset( $instagram_user_info->data->counts->media ) ? $instagram_user_info->data->counts->media : $number_posted_pics_fb_api;
@@ -746,8 +749,7 @@ if ( 'yes' === $profile_stats ) {
 			</div>
 			<?php
 }
-
-if ( 'yes' === $profile_description ) {
+if ( isset( $profile_description, $type ) && 'yes' === $profile_description  && 'business' === $type ) {
 	?>
 
 			<div class="fts-profile-description"><?php echo $this->convert_instagram_description_links( $bio ); ?>
@@ -759,9 +761,9 @@ if ( 'yes' === $profile_description ) {
 
 	</div>
 					<?php
-				} elseif ( isset( $instagram_user_info->data->username ) && 'yes' === $fts_instagram_show_follow_btn && 'instagram-follow-above' === $fts_instagram_show_follow_btn_where ) {
+				} elseif ( 'yes' === $fts_instagram_show_follow_btn && 'instagram-follow-above' === $fts_instagram_show_follow_btn_where && 'hashtag' !== $type ) {
 					echo '<div class="instagram-social-btn-top">';
-					echo $this->social_follow_button( 'instagram', $instagram_user_info->data->username );
+					echo $this->social_follow_button( 'instagram', $username );
 					echo '</div>';
 				}
 
@@ -887,7 +889,7 @@ if ( 'yes' === $profile_description ) {
 						?>
 					<div class="fts-instagram-popup-profile-wrap">
 						<div class="fts-profile-pic"><?php $user_type = isset( $type ) && 'hashtag' === $type ? 'explore/tags/' . $hashtag : $username; ?>
-							<a href="https://www.instagram.com/<?php echo esc_html( $user_type ); ?>" target="_blank">
+							<a href="https://www.instagram.com/<?php echo esc_html( $user_type ); ?>" target="_blank" rel="noreferrer">
 						<?php
 						if ( 'user' === $type || 'business' === $type ) {
 							?>
@@ -901,7 +903,7 @@ if ( 'yes' === $profile_description ) {
 						<div class="fts-profile-name-wrap">
 
 							<div class="fts-isnta-full-name">
-								<a href="https://www.instagram.com/<?php echo esc_html( $user_type ); ?>" target="_blank" style="color: #000;">
+								<a href="https://www.instagram.com/<?php echo esc_html( $user_type ); ?>" target="_blank" rel="noreferrer" style="color: #000;">
 								<?php
 								if ( 'user' === $type ) {
 									echo esc_html( $full_name );
@@ -915,7 +917,7 @@ if ( 'yes' === $profile_description ) {
 							</div>
 
 							<?php
-							if ( isset( $instagram_username ) && 'yes' === $fts_instagram_show_follow_btn && 'instagram-follow-above' === $fts_instagram_show_follow_btn_where ) {
+							if ( isset( $instagram_username ) && 'yes' === $fts_instagram_show_follow_btn && 'instagram-follow-above' === $fts_instagram_show_follow_btn_where && 'hashtag' !== $type ) {
 								echo '<div class="fts-follow-header-wrap">';
 								echo $this->social_follow_button( 'instagram', $instagram_username );
 								echo '</div>';
@@ -960,7 +962,7 @@ if ( 'yes' === $profile_description ) {
 					}
 					$fts_child = isset( $post_data->children ) || isset( $post_data->carousel_media ) ? 'fts-child-media ' : '';
 					?>
-					' title='<?php print esc_attr( $instagram_caption_a_title ); ?>' target="_blank" class='<?php print $fts_child; ?>fts-instagram-link-target fts-slicker-backg
+					' title='<?php print esc_attr( $instagram_caption_a_title ); ?>' target="_blank" rel="noreferrer" class='<?php print $fts_child; ?>fts-instagram-link-target fts-slicker-backg
 					<?php
 					if ( $data_type_video === $data_type && isset( $popup ) && 'yes' === $popup && ! empty( $this->fts_instagram_video_link( $post_data ) ) || ! empty( $data_type_child ) && 'VIDEO' === $data_type_child && isset( $popup ) && 'yes' === $popup && ! empty( $this->fts_instagram_video_link( $post_data ) ) ) {
 						?>
@@ -1004,7 +1006,7 @@ if ( 'yes' === $profile_description ) {
 
 							}
 							?>
-						' title='<?php print esc_attr( $instagram_caption_a_title ); ?>' target="_blank" id="fts-child-media" class='fts-child-media fts-child-media-hide fts-instagram-link-target fts-slicker-backg
+						' title='<?php print esc_attr( $instagram_caption_a_title ); ?>' target="_blank" rel="noreferrer" class='fts-child-media fts-child-media-hide fts-instagram-link-target fts-slicker-backg
 							<?php
 							if ( 'video_media' === $data_type_video_child && isset( $popup ) && 'yes' === $popup ) {
 								?>
@@ -1094,7 +1096,7 @@ if ( 'yes' === $profile_description ) {
 
 					<div class="fts-instagram-popup-profile-wrap">
 						<div class="fts-profile-pic">
-							<a href="https://www.instagram.com/<?php echo esc_attr( $username ); ?>" target="_blank"><img
+							<a href="https://www.instagram.com/<?php echo esc_attr( $username ); ?>" target="_blank" rel="noreferrer"><img
 										src="<?php echo esc_attr( $profile_picture ); ?>" title="<?php echo esc_attr( $username ); ?>"/></a>
 						</div>
 
@@ -1141,7 +1143,7 @@ if ( 'yes' === $profile_description ) {
 						<?php
 					} else {
 						?>
-	fts-instagram-img-link<?php } ?>' target='_blank' title='<?php echo esc_attr( $instagram_caption_a_title ); ?>'>
+	fts-instagram-img-link<?php } ?>' target='_blank' rel="noreferrer" title='<?php echo esc_attr( $instagram_caption_a_title ); ?>'>
 					<img src="<?php echo esc_url( $instagram_thumb_url ); ?>" class="instagram-image"/>
 					<div class='instaG-photoshadow'></div>
 				</a>
@@ -1308,9 +1310,9 @@ if ( 'yes' === $profile_description ) {
 			// Make sure it's not ajaxing.
 			if ( ! isset( $_GET['load_more_ajaxing'] ) ) {
 				// Social Button.
-				if ( isset( $instagram_user_info->data->username ) && 'yes' === $fts_instagram_show_follow_btn && 'instagram-follow-below' === $fts_instagram_show_follow_btn_where ) {
+				if ( isset( $username ) && 'yes' === $fts_instagram_show_follow_btn && 'instagram-follow-below' === $fts_instagram_show_follow_btn_where && 'hashtag' !== $type  ) {
 					echo '<div class="instagram-social-btn-bottom">';
-					echo $this->social_follow_button( 'instagram', $instagram_user_info->data->username );
+					echo $this->social_follow_button( 'instagram', $username );
 					echo '</div>';
 				}
 			}
